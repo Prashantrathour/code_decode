@@ -19,7 +19,13 @@
 
 // Function to encode an upper case string
 const findposition = (char) => {
-  return char.charCodeAt(0) - "A".charCodeAt(0) + 1;
+    if (/^[A-Z]$/.test(char)) {
+      return char.charCodeAt(0) - "A".charCodeAt(0) + 1;
+      
+    }else{
+      return char.charCodeAt(0) - "a".charCodeAt(0) + 1;
+   
+  }
 };
 function findOpposite(letter) {
   if (/^[A-Z]$/.test(letter)) {
@@ -30,11 +36,18 @@ function findOpposite(letter) {
     );
 
     return oppositeLetter;
+  }else{
+    const oppositePosition =
+      25 - (letter.charCodeAt(0) - "a".charCodeAt(0)) + 1;
+    const oppositeLetter = String.fromCharCode(
+      "a".charCodeAt(0) + oppositePosition - 1
+    );
+
+    return oppositeLetter;
   }
 
  
 }
-
 function encode(input) {
   let encodedOutput = "";
 
@@ -57,23 +70,21 @@ function decode(str) {
 
   let arr = [];
   for (let i = 0; i < str.length; i++) {
-    let number = str.charCodeAt(i) - "a".charCodeAt(0) + 1;
-    let opposite = 26 - number + 1;
     if (
-      number % 2 == 0 &&
-      str[i + 1] == String.fromCharCode("a".charCodeAt(0) + opposite - 1)
+        findposition(str[i]) % 2 == 0 &&
+      str[i + 1] == findOpposite(str[i])
     ) {
       arr.push(str[i]);
       i++;
     } else {
-      arr.push(String.fromCharCode("a".charCodeAt(0) + opposite - 1));
+      arr.push(findOpposite(str[i]));
     }
   }
   let ans = arr.join("");
   return ans.toUpperCase();
 }
 let arr = ["ABC", "XYZ", "GHI", "NOP", "JKL", "UTS"];
-const input = arr[5];
+const input = arr[2];
 const encodedOutput = encode(input);
 console.log(`Input data: ${input}\nEncoded Output: ${encodedOutput}`);
 
